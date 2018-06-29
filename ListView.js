@@ -1,3 +1,10 @@
+/*
+* For more details read: https://facebook.github.io/react-native/docs/listviewdatasource.html
+* To update the data in the datasource, use cloneWithRows (or cloneWithRowsAndSections
+* if you care about sections).
+* The data in the data source is immutable, so you can't modify it directly.
+* */
+
 import React, {Component} from "react";
 import {
     StyleSheet,
@@ -11,8 +18,6 @@ import {
 export default class OwnListView extends Component {
     constructor(props) {
         super(props);
-        // this.fetchMore = this._fetchMore.bind(this);
-        // this.fetchData = this._fetchData.bind(this);
         this.state = {
             dataSource: null,
             isLoading: true,
@@ -36,7 +41,7 @@ export default class OwnListView extends Component {
         });
     }
 
-    fetchData =(callback) => {
+    fetchData = (callback) => {
         const params = this.state._dataAfter !== ""
             ? `?after=${this.state._dataAfter}`
             : "";
@@ -48,20 +53,8 @@ export default class OwnListView extends Component {
             });
     };
 
-    // _fetchMore = () => {
-    //     this.fetchData(responseJson => {
-    //         console.log('fetchMore', responseJson);
-    //         const data = this.state._data.concat(responseJson.data.children);
-    //         this.setState({
-    //             dataSource: this.state.dataSource.cloneWithRows(data),
-    //             isLoadingMore: false,
-    //             _data: data,
-    //             _dataAfter: responseJson.data.after
-    //         });
-    //     });
-    // };
 
-    fetchMore = () =>{
+    fetchMore = () => {
         this.fetchData(responseJson => {
             console.log('fetchMore', responseJson);
             const data = this.state._data.concat(responseJson.data.children);
