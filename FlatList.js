@@ -23,6 +23,8 @@ export default class OwnFlatList extends Component<ListProps> {
             seed: 1,
             error: null,
             refreshing: false,
+            contentOffset: 0,
+            hideSearch: false,
         };
     }
 
@@ -62,7 +64,7 @@ export default class OwnFlatList extends Component<ListProps> {
         );
     };
     renderHeader = () => {
-        return <SearchBar placeholder="Type Here..." lightTheme round />;
+        return <SearchBar placeholder="Type Here..." lightTheme round/>;
     };
     renderFooter = () => {
         if (!this.state.loading) return null;
@@ -75,16 +77,32 @@ export default class OwnFlatList extends Component<ListProps> {
                     borderColor: "#CED0CE"
                 }}
             >
-                <ActivityIndicator animating size="large" />
+                <ActivityIndicator animating size="large"/>
             </View>
         );
     };
+
+    handleScroll = (event) => {
+        const changer = {};
+        if (event.nativeEvent.contentOffset.y > this.state.contentOffset) {
+            changer.hideSearch = false;
+        } else {
+            changer.hideSearch = true;
+        }
+        changer.contentOffset = event.nativeEvent.contentOffset.y;
+        this.setState({hideSearch: changer.hideSearch, contentOffset: changer.contentOffset,});
+    };
+
     render() {
         return (
             <List
-                containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}
+                containerStyle={{
+                    borderTopWidth: 5, borderBottomWidth: 0,
+                    borderTopColor: this.state.hideSearch ? 'red' : 'yellow'
+                }}
             >
                 <FlatList
+                    onScroll={this.handleScroll}
                     ListHeaderComponent={this.renderHeader}
                     ListFooterComponent={this.renderFooter}
                     ItemSeparatorComponent={this.renderSeparator}
@@ -96,7 +114,7 @@ export default class OwnFlatList extends Component<ListProps> {
                             title={`${item.name.first} ${item.name.last}`}
                             subtitle={item.email}
                             avatar={{uri: item.picture.thumbnail}}
-                            containerStyle={{ borderBottomWidth: 0 }}
+                            containerStyle={{borderBottomWidth: 0}}
                         />
                     )}
                 />

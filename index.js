@@ -6,4 +6,4 @@ import OwnFlatList from './FlatList';
 import OwnListView from './ListView';
 import Usage from "./hoc";
 
-AppRegistry.registerComponent('AwesomeProject2', () => OwnListView);
+AppRegistry.registerComponent('AwesomeProject2', () => OwnFlatList);
